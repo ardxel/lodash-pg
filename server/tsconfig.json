@@ -1,0 +1,24 @@
+{
+    "require": ["tsconfig-paths/register"],
+    "compilerOptions": {
+        /* Visit https://aka.ms/tsconfig to read more about this file */
+        "target": "ESNext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+        "lib": ["dom", "ESNext"],
+
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "module": "NodeNext" /* Specify what module code is generated. */,
+        "rootDir": "./src" /* Specify the root folder within your source files. */,
+        "baseUrl": "./src",
+        "moduleResolution": "NodeNext" /* Specify how TypeScript looks up a file from a given module specifier. */,
+        "skipDefaultLibCheck": true,
+        "esModuleInterop": true,
+        "strict": true /* Enable all strict type-checking options. */,
+        "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+        "incremental": true,
+        "outDir": "./build",
+        "declarationMap": true,
+        "composite": true,
+        "tsBuildInfoFile": "./build/tsbuildinfo"
+    }
+}
