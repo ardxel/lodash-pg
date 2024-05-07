@@ -1,51 +1,58 @@
-import * as path from "path";
+import isolatedVM from "isolated-vm";
+import * as assert from "node:assert";
+import { serializeError } from "serialize-error";
 
-import { exec as execWithCallback } from "node:child_process";
-import * as util from "node:util";
-import { config } from "polygon/common";
-import testCases, { ImplementedLodashFn } from "../test-cases";
+import { TestMapper, testMapper } from "polygon/testMapper";
 import { LodashFunctions } from "../types";
-
-const execAsync = util.promisify(execWithCallback);
+import { CodeGenerator } from "./codeGenerator";
 
 export type TestingResult = {
-    tests: (boolean | Error)[];
-    criticalError: string | null;
+    testResults: (boolean | Error)[];
 };
 
 export class CodeTestReviewer {
-    private readonly testCasesMap = testCases;
-    private readonly execScriptPath = path.join(process.cwd(), "./scripts/execTempFn.js");
+    private readonly TEST_FN_NAME = "test";
+    private readonly ISOLATE_MEMORY_LIMIT = 32;
+    private readonly testMapper: TestMapper = testMapper;
+    private readonly codeGenerator: CodeGenerator = new CodeGenerator();
 
-    public async testFn<T extends ImplementedLodashFn | keyof LodashFunctions>(
-        tempFilePath: string,
-        lodashFnName: T,
-    ): Promise<TestingResult> {
-        let testingResult: TestingResult = {
-            tests: [false, false, false],
-            criticalError: null,
-        };
+    public async testCode<T extends keyof LodashFunctions>(code: string, lodashFnName: T): Promise<TestingResult> {
+        const environment = await this.compileIsolatedEnvironment(code, lodashFnName);
 
         try {
-            const cmd = ["node", this.execScriptPath, tempFilePath].join(" ");
-            const fnArgs = JSON.stringify(this.testCasesMap["join"].map((c) => c.input));
-            const expectedFnResult = JSON.stringify(this.testCasesMap["join"].map((c) => c.expected));
+            await environment.script.run(environment.context);
+            const testFn = await environment.context.global.get(this.TEST_FN_NAME);
 
-            const env = Object.assign(process.env, {
-                fnArgs,
-                expectedFnResult,
-            });
+            const result = testFn(this.testMapper.get(lodashFnName).testCases);
 
-            const { stdout, stderr } = await execAsync(cmd, { env });
-
-            console.error(stderr);
-
-            testingResult = JSON.parse(stdout);
-
-            return testingResult;
+            return result;
         } catch (E) {
             console.error(E);
-            return testingResult;
+            const serializableError = serializeError(E);
+            return {
+                testResults: new Array(this.testMapper.get(lodashFnName).testCases.length).fill(serializableError),
+            };
+        } finally {
+            environment.isolate.dispose();
         }
+    }
+
+    private async compileIsolatedEnvironment(userCode: string, lodashFnName: string) {
+        const isolate = new isolatedVM.Isolate({ memoryLimit: this.ISOLATE_MEMORY_LIMIT });
+        const context = await isolate.createContext();
+
+        await context.global.set("strictEqual", assert.strictEqual);
+        await context.global.set("equal", assert.equal);
+        await context.global.set("serializeError", serializeError);
+
+        const code = [userCode, this.codeGenerator.generateTestingCode(lodashFnName)].join("\n");
+
+        const script = await isolate.compileScript(code);
+
+        return {
+            context,
+            script,
+            isolate,
+        };
     }
 }

@@ -1,13 +1,13 @@
 import { IsIn, IsNotEmpty, IsString } from "class-validator";
-import { config as pConfig } from "polygon/common";
+import { testMapper } from "polygon/testMapper";
 import { LodashFunctions } from "polygon/types";
 
-const lodashFnArray = Array.from(pConfig.lodashFnSet);
+export const lodashFnArray = testMapper.asArrayImplemented();
 
 export class ExecuteCodeDto {
     @IsString()
     @IsIn(lodashFnArray, {
-        message: (args) => args.value,
+        message: (args) => `Function ${args.value} is not in the tested list`,
     })
     @IsNotEmpty()
     lodash_fn_name: keyof LodashFunctions;
