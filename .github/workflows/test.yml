@@ -8,23 +8,20 @@ on:
     branches:
       - main
       - dev/server
-<<<<<<< HEAD
       - dev/client
-=======
->>>>>>> b1edb107fe96c4247fa84ab406f210cf76892d36
-
+      
 jobs:
   server-tests:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js (Backend)
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: latest
 
       - name: Change to Backend Directory
         run: cd server 
