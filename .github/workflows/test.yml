@@ -9,22 +9,27 @@ on:
       - main
       - dev/server
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       - dev/client
 >>>>>>> 70e877f (client init)
 
+=======
+      - dev/client
+      
+>>>>>>> 9291f05 (Update test.yml)
 jobs:
   server-tests:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js (Backend)
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: latest
 
       - name: Change to Backend Directory
         run: cd server 
