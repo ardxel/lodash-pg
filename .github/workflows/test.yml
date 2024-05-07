@@ -8,6 +8,10 @@ on:
     branches:
       - main
       - dev/server
+<<<<<<< HEAD
+=======
+      - dev/client
+>>>>>>> 70e877f (client init)
 
 jobs:
   server-tests:

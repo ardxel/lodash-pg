@@ -1,8 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { LoggerMiddleware } from "api/common/middleware";
-import { ExecModule } from "api/exec/exec.module";
+import { AppController } from "./app.controller";
 import { validate } from "./env.validation";
+import { ExecModule } from "api/exec/exec.module";
+import { LoggerMiddleware } from "api/common/middleware";
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { validate } from "./env.validation";
         }),
         ExecModule,
     ],
+    controllers: [AppController],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
