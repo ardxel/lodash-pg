@@ -10,6 +10,7 @@ on:
       - dev/server
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       - dev/client
 >>>>>>> 70e877f (client init)
@@ -18,6 +19,10 @@ on:
       - dev/client
       
 >>>>>>> 9291f05 (Update test.yml)
+=======
+      - dev/client
+      
+>>>>>>> 601fc9bb11496c458bd5a30d9641d2fbb633e45e
 jobs:
   server-tests:
     runs-on: ubuntu-latest
