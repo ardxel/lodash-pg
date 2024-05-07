@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { CodeExecutor } from "polygon";
 import { CodeGenerator, TestingResult } from "polygon/executor";
-import { DefaultCodeDto, ExecuteCodeDto } from "./dto";
 import { TestMapper } from "polygon/testMapper";
+import { ExecuteCodeDto } from "./dto";
 
 @Injectable()
 export class ExecService {
