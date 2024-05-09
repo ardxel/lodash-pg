@@ -1,8 +1,8 @@
 import { IsIn, IsNotEmpty, IsString } from "class-validator";
-import { testMapper } from "polygon/testMapper";
+import { TestMapper } from "polygon/testMapper";
 import { LodashFunctions } from "polygon/types";
 
-export const lodashFnArray = testMapper.asArrayImplemented();
+export const lodashFnArray = TestMapper.asArrayImplemented();
 
 export class ExecuteCodeDto {
     @IsString()

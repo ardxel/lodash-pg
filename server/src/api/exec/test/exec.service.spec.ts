@@ -1,7 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { CodeExecutor } from "polygon";
 import { CodeGenerator } from "polygon/executor";
-import { TestMapper } from "polygon/testMapper";
 import { ExecService } from "../exec.service";
 
 describe("ExecService", () => {
@@ -9,7 +8,7 @@ describe("ExecService", () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [ExecService, CodeExecutor, TestMapper, CodeGenerator],
+            providers: [ExecService, CodeExecutor, CodeGenerator],
         }).compile();
 
         service = module.get<ExecService>(ExecService);

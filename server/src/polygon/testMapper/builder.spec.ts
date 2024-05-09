@@ -1,8 +1,8 @@
 import { LodashTestBuilder, LodashTestManager } from "./builder";
-import { LodashTestObject } from "./types";
+import { LodashEntity } from "./types";
 
 describe("Test testMapper module", () => {
-    const mockBuilderResult: LodashTestObject = {
+    const mockBuilderResult: LodashEntity = {
         testCases: [
             {
                 input: [[1, 2, 3, 4, 5], ","],
@@ -25,6 +25,8 @@ describe("Test testMapper module", () => {
                 type: "string",
             },
         ],
+        examples: [`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`],
+        description: "abc",
     };
 
     const createBuilder = () => new LodashTestBuilder("join");
@@ -41,6 +43,7 @@ describe("Test testMapper module", () => {
                 .addTest([["foo", "bar", "baz"], " - "], "foo - bar - baz")
                 .addArgs("arr", "Array<any>")
                 .addArgs("separator", "string")
+                .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
                 .setReturnType("string");
 
             expect(manager.getObjectAsMap().get("join")).toEqual(mockBuilderResult);
@@ -57,7 +60,9 @@ describe("Test testMapper module", () => {
                 .addTest([["foo", "bar", "baz"], " - "], "foo - bar - baz")
                 .addArgs("arr", "Array<any>")
                 .addArgs("separator", "string")
-                .setReturnType("string");
+                .setReturnType("string")
+                .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
+                .addDescription("abc");
 
             expect(builder.toObject()).toEqual(mockBuilderResult);
         });
@@ -70,7 +75,9 @@ describe("Test testMapper module", () => {
                 .addTest([["a", "b", "c"], ""], "abc")
                 .addArgs("arr", "Array<any>")
                 .addArgs("separator", "string")
-                .setReturnType("string");
+                .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
+                .setReturnType("string")
+                .addDescription("abc");
 
             expect(() => builder.toObject()).toThrow(Error);
         });
@@ -82,7 +89,9 @@ describe("Test testMapper module", () => {
                 .addTest([[1, 2, 3, 4, 5], ","], "1,2,3,4,5")
                 .addTest([["a", "b", "c"], ""], "abc")
                 .addTest([["foo", "bar", "baz"], " - "], "foo - bar - baz")
-                .setReturnType("string");
+                .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
+                .setReturnType("string")
+                .addDescription("abc");
 
             expect(() => builder.toObject()).toThrow(Error);
         });
@@ -94,7 +103,37 @@ describe("Test testMapper module", () => {
                 .addTest([[1, 2, 3, 4, 5], ","], "1,2,3,4,5")
                 .addTest([["a", "b", "c"], ""], "abc")
                 .addArgs("arr", "Array<any>")
-                .addArgs("separator", "string");
+                .addArgs("separator", "string")
+                .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
+                .addDescription("abc");
+
+            expect(() => builder.toObject()).toThrow(Error);
+        });
+        test("should throws error because builder doesnt have description", () => {
+            const builder = createBuilder();
+
+            builder
+                .addTest([[1, 2, 3, 4, 5], ","], "1,2,3,4,5")
+                .addTest([["a", "b", "c"], ""], "abc")
+                .addTest([["foo", "bar", "baz"], " - "], "foo - bar - baz")
+                .addArgs("arr", "Array<any>")
+                .addArgs("separator", "string")
+                .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
+                .setReturnType("string");
+
+            expect(() => builder.toObject()).toThrow(Error);
+        });
+        test("should throws error because builder doesnt have examples", () => {
+            const builder = createBuilder();
+
+            builder
+                .addTest([[1, 2, 3, 4, 5], ","], "1,2,3,4,5")
+                .addTest([["a", "b", "c"], ""], "abc")
+                .addTest([["foo", "bar", "baz"], " - "], "foo - bar - baz")
+                .addArgs("arr", "Array<any>")
+                .addArgs("separator", "string")
+                .setReturnType("string")
+                .addDescription("abc");
 
             expect(() => builder.toObject()).toThrow(Error);
         });

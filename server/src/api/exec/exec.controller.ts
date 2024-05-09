@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { TestingResult } from "polygon/executor";
-import { DefaultCodeDto, ExecuteCodeDto } from "./dto";
+import { LodashEntityDto, ExecuteCodeDto } from "./dto";
 import { ExecService } from "./exec.service";
 
 @Controller("exec")
@@ -17,8 +17,10 @@ export class ExecController {
         return this.execService.getImplementedLodashMethodKeys();
     }
 
-    @Get("/generate")
-    public getDefaultCodeByLodashFnKey(@Query() dto: DefaultCodeDto) {
-        return this.execService.getDefaultCode(dto.lodash_fn_name);
+    @Get("entity")
+    public getEntityOfLodash(@Query() dto: LodashEntityDto) {
+        const v = this.execService.getLodashEntityByName(dto.lodash_fn_name);
+        console.log(v);
+        return v;
     }
 }

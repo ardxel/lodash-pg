@@ -2,7 +2,7 @@ import isolatedVM from "isolated-vm";
 import * as assert from "node:assert";
 import { serializeError } from "serialize-error";
 
-import { TestMapper, testMapper } from "polygon/testMapper";
+import { TestMapper } from "polygon/testMapper";
 import { LodashFunctions } from "../types";
 import { CodeGenerator } from "./codeGenerator";
 
@@ -13,7 +13,7 @@ export type TestingResult = {
 export class CodeTestReviewer {
     private readonly TEST_FN_NAME = "test";
     private readonly ISOLATE_MEMORY_LIMIT = 32;
-    private readonly testMapper: TestMapper = testMapper;
+    private readonly testMapper = TestMapper;
     private readonly codeGenerator: CodeGenerator = new CodeGenerator();
 
     public async testCode<T extends keyof LodashFunctions>(code: string, lodashFnName: T): Promise<TestingResult> {

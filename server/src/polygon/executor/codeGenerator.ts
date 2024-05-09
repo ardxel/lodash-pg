@@ -1,7 +1,7 @@
-import { testMapper } from "polygon/testMapper";
+import { TestMapper } from "polygon/testMapper";
 
 export class CodeGenerator {
-    private readonly testMapper = testMapper;
+    private readonly testMapper = TestMapper;
 
     public generateTestingCode(lodashFnName: string): string {
         const str = `
@@ -27,11 +27,10 @@ export class CodeGenerator {
     public generateDefaultCode(lodashFnName: string) {
         const jsdoc = this.generateJSDOC(lodashFnName);
         const fn = this.generateDefaultFunction(lodashFnName);
-        return { generatedCode: jsdoc + "\n" + fn };
+        return jsdoc + "\n" + fn;
     }
 
     private generateJSDOC(lodashFnName: string): string {
-        console.log("MAP OBJECT: ", this.testMapper.get(lodashFnName));
         const testObj = this.testMapper.get(lodashFnName);
         const args = testObj.arguments;
         const returnType = testObj.returnType;
