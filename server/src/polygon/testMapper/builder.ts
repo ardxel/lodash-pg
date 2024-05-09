@@ -58,7 +58,7 @@ export class LodashTestBuilder<T extends LodashFunctionsKeys> {
         }
 
         if (!this._description) {
-            throw new Error(`Description fro ${this._fnName} is not defined`);
+            throw new Error(`Description for ${this._fnName} is not defined`);
         }
 
         if (!this._examples.length) {

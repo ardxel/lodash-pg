@@ -44,7 +44,8 @@ describe("Test testMapper module", () => {
                 .addArgs("arr", "Array<any>")
                 .addArgs("separator", "string")
                 .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
-                .setReturnType("string");
+                .setReturnType("string")
+                .addDescription("abc");
 
             expect(manager.getObjectAsMap().get("join")).toEqual(mockBuilderResult);
         });
