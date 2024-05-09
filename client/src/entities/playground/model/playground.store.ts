@@ -1,15 +1,15 @@
 import { AsyncStore } from '@/shared/model';
-import { url } from 'inspector';
-import { action, makeObservable, observable, runInAction, computed } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 
 type IStdoutFromServer = {
   tests: Array<boolean | Error>;
 };
 
 export class PlaygroundStore extends AsyncStore {
-  public code: string = `module.exports = function(array, sep) {
-	return array.join(sep);
-}`;
+  public code: string = '';
+  public desc: string = '';
+  public codeExamples: string[] = [];
+  public inputExamples: unknown[] = [];
   public selectedLodashFn: string = 'join';
   public executionResult: IStdoutFromServer = { tests: [] };
   public implementedLodashMethodKeys: string[] = [];
@@ -18,9 +18,9 @@ export class PlaygroundStore extends AsyncStore {
     this.code = input;
   }
 
-  public async getImplementedLodashMethodKeys() {
+  public async getImplementedLodashMethodKeys(): Promise<void> {
     try {
-      const implementedKeys = await this.fetchData<string[]>('/api', 'GET');
+      const implementedKeys = await this.fetchData<string[]>('/playground/api', 'GET');
 
       runInAction(() => {
         this.implementedLodashMethodKeys = implementedKeys;
@@ -30,23 +30,29 @@ export class PlaygroundStore extends AsyncStore {
     }
   }
 
-  public async generateDefaultCodeByLodashFnKey(lodashFnName: string) {
+  public async getEntity(lodashFnName: string): Promise<void> {
     try {
-      const url = `/api/generate?lodash_fn_name=${lodashFnName}`;
+      const searchParams = new URLSearchParams();
+      searchParams.set('lodash_fn_name', lodashFnName);
 
-      const { generatedCode } = await this.fetchData<{ generatedCode: string }>(url, 'GET');
+      const url = `/playground/api/entity?${searchParams}`;
 
+      const data = await this.fetchData<any>(url, 'GET');
+      console.log(data);
       runInAction(() => {
-        this.code = generatedCode;
+        this.code = data.defaultCode;
+        this.desc = data.description;
+        this.inputExamples = data.inputs;
+        this.codeExamples = data.examples;
       });
     } catch (E) {
       console.error(E);
     }
   }
 
-  public async executeCodeOnServer() {
+  public async executeCodeOnServer(): Promise<void> {
     try {
-      const executedResult = await this.fetchData<IStdoutFromServer>('/api', 'POST', {
+      const executedResult = await this.fetchData<IStdoutFromServer>('/playground/api', 'POST', {
         code: this.code,
         lodash_fn_name: this.selectedLodashFn,
       });
@@ -75,7 +81,7 @@ export class PlaygroundStore extends AsyncStore {
       executionResult: observable,
       code: observable,
 
-      generateDefaultCodeByLodashFnKey: action,
+      getEntity: action,
       getImplementedLodashMethodKeys: action,
       executeCodeOnServer: action,
       changeCode: action,

@@ -1,0 +1,46 @@
+.panel {
+  display: flex;
+  align-items: center;
+  column-gap: 2px;
+  width: 100%;
+  background-color: #f7f7f7;
+
+  .btn {
+    font-family: var(--font-loto);
+    font-size: 10px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px 4px 8px;
+    color: black;
+    background-color: inherit;
+
+    position: relative;
+    transition: background-color 0.25s ease-in;
+
+    &:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+
+    &:hover {
+      background-color: #c9c9c9;
+      cursor: pointer;
+    }
+
+    &:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    &:not(:last-of-type)::after {
+      content: '';
+      height: 100%;
+      width: 2px;
+      background-color: white;
+      position: absolute;
+      right: -2px;
+    }
+  }
+}

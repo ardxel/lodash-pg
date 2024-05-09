@@ -10,12 +10,6 @@
   font-weight: 300;
   row-gap: 10px;
   background-color: var(--light-gray);
-
-  & > section {
-    flex: 1;
-    background-color: white;
-    padding: 6px;
-  }
 }
 
 .terminal-header {
@@ -25,8 +19,9 @@
   line-height: 8px;
 }
 
-.terminal-tests {
-  display: flex;
-  flex-direction: column;
-  column-gap: 10px;
+.section {
+  overflow-y: auto;
+  height: 100%;
+  padding: 4px 0px 4px 4px;
+  background-color: white;
 }

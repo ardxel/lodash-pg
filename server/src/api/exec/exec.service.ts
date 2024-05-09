@@ -6,9 +6,10 @@ import { ExecuteCodeDto } from "./dto";
 
 @Injectable()
 export class ExecService {
+    private readonly testMapper = TestMapper;
+
     constructor(
         private readonly codeExecutor: CodeExecutor,
-        private readonly testMapper: TestMapper,
         private readonly codeGenerator: CodeGenerator,
     ) {}
 
@@ -20,7 +21,14 @@ export class ExecService {
         return this.testMapper.asArrayImplemented();
     }
 
-    public async getDefaultCode(fnName: string): Promise<{ generatedCode: string }> {
-        return this.codeGenerator.generateDefaultCode(fnName);
+    public async getLodashEntityByName(fnName: string) {
+        const lodashTestObject = this.testMapper.get(fnName);
+
+        return {
+            defaultCode: this.codeGenerator.generateDefaultCode(fnName),
+            inputs: lodashTestObject.testCases.map((test) => test.input),
+            description: lodashTestObject.description,
+            examples: lodashTestObject.examples,
+        };
     }
 }

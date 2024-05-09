@@ -1,1 +1,5 @@
-cd ./server && npx lint-staged
+BASE_DIR=$(git rev-parse --show-toplevel)
+
+cd "$BASE_DIR/server" && npx lint-staged
+
+cd "$BASE_DIR/client" && npm run lint

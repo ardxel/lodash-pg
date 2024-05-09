@@ -6,12 +6,21 @@ import { observer } from 'mobx-react-lite';
 import styles from './editor.module.css';
 import './monaco-editor-styles.css';
 
+const EditorLoading = () => {
+  return (
+    <div className={styles.editorLoading}>
+      <h1>Loading...</h1>
+    </div>
+  );
+};
+
 const CodeEditor = observer(() => {
   const { playgroundStore } = useAppStore();
 
   return (
     <div className={styles.editorWrap}>
       <Editor
+        loading={<EditorLoading />}
         value={playgroundStore.code}
         onChange={(value) => (value ? playgroundStore.changeCode(value) : null)}
         options={{

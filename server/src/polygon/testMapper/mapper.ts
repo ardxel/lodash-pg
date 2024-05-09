@@ -1,5 +1,4 @@
 import { LoDashStatic, isFunction, pickBy } from "lodash";
-import { ModuleConfig } from "polygon/common";
 import lodashTestMap, { LodashTestMap } from "./testsMap";
 
 function extractLodashKeys(): string[] {
@@ -9,36 +8,26 @@ function extractLodashKeys(): string[] {
     return lodashFnKeysLower;
 }
 
-export class TestMapper extends ModuleConfig {
-    private _testMap: LodashTestMap;
-    private _lodashKeys: Set<string>;
-    private _lodashKeysImplemented: Set<string>;
+export class TestMapper {
+    private static _testMap: LodashTestMap = lodashTestMap;
+    private static _lodashKeys: Set<string> = new Set(extractLodashKeys());
+    private static _lodashKeysImplemented: Set<string> = new Set(this._testMap.getKeys());
 
-    constructor() {
-        super();
+    private constructor() {}
 
-        this._testMap = lodashTestMap;
-
-        this._lodashKeys = new Set(extractLodashKeys());
-
-        this._lodashKeysImplemented = new Set(this._testMap.getKeys());
-    }
-
-    public get(lodashFnName: string) {
+    public static get(lodashFnName: string) {
         if (this.has(lodashFnName)) return this._testMap.get(lodashFnName);
     }
 
-    public has(lodashFnName: string): boolean {
+    public static has(lodashFnName: string): boolean {
         return this._lodashKeysImplemented.has(lodashFnName);
     }
 
-    public asArray(): string[] {
+    public static asArray(): string[] {
         return Array.from(this._lodashKeys);
     }
 
-    public asArrayImplemented(): string[] {
+    public static asArrayImplemented(): string[] {
         return Array.from(this._lodashKeysImplemented);
     }
 }
-
-export const testMapper = new TestMapper();
