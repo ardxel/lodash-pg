@@ -10,29 +10,3 @@
     height: 100%;
   }
 }
-
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 10px;
-  font-size: 16px;
-  padding: 5px 10px 5px 10px;
-  font-weight: 300;
-  color: white;
-  background: blue;
-}
-
-.arrow {
-  width: 26px;
-  height: 26px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & > svg {
-    fill: white;
-  }
-}

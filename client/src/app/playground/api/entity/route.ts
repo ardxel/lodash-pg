@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { headersWithApiKey } from '../.headers';
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,14 +8,9 @@ export async function GET(request: NextRequest) {
     const apiUrl = new URL(process.env.REST_API_URL + '/exec/entity');
     apiUrl.searchParams.set('lodash_fn_name', lodashFn!);
 
-    const headers = new Headers();
-
-    headers.set('Content-Type', 'application/json');
-    headers.set('Cache-Control', 'no-store');
-
     const response = await fetch(apiUrl.toString(), {
       method: 'GET',
-      headers,
+      headers: headersWithApiKey,
     });
 
     const result = await response.json();

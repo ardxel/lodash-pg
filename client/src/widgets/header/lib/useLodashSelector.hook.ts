@@ -1,32 +1,32 @@
-import { useAppStore } from '@/app/.store';
+import { usePlaygroundStore } from '@/app/.store';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 
-export const useLodashSelector = () => {
-  const { playgroundStore } = useAppStore();
-  const [selected, setSelected] = useState<any>({});
+export type SelectorOption = { value: string; label: string };
+
+export const useLodashSelector = (): [SelectorOption, (newValue: SelectorOption) => void] => {
+  const pg = usePlaygroundStore();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!playgroundStore.implementedLodashMethodKeys.length) {
-      playgroundStore.getImplementedLodashMethodKeys();
+    if (!pg.implementedLodashMethodKeys.length) {
+      pg.getImplementedLodashMethodKeys();
     }
 
     const selectedLodashFn = searchParams.get('lodash_fn');
+
     if (selectedLodashFn) {
-      setSelected(() => {
-        playgroundStore.getEntity(selectedLodashFn);
-        return { value: selectedLodashFn, label: selectedLodashFn };
-      });
+      pg.selectLodashFn(selectedLodashFn);
+      pg.getEntity();
     }
   }, []);
 
-  const selectLodashFn = useCallback((newValue?: { value: string; label: string }, changeQuery = true) => {
+  const handleSelectLodashFn = useCallback((newValue?: { value: string; label: string }, changeQuery = true) => {
     if (!newValue) return;
 
-    setSelected(newValue);
-    playgroundStore.getEntity(newValue.value);
+    pg.selectLodashFn(newValue.value);
+    pg.getEntity();
 
     if (changeQuery) {
       const updatedSearchParams = new URLSearchParams(searchParams);
@@ -35,5 +35,7 @@ export const useLodashSelector = () => {
     }
   }, []);
 
-  return [selected, selectLodashFn];
+  const asOption = { value: pg.selectedLodashFn, label: pg.selectedLodashFn };
+
+  return [asOption, handleSelectLodashFn];
 };

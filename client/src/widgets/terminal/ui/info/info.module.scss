@@ -7,17 +7,21 @@
 
   .btn {
     font-family: var(--font-loto);
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 400;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 8px 4px 8px;
+    padding: 10px 8px 10px 8px;
     color: black;
     background-color: inherit;
 
     position: relative;
     transition: background-color 0.25s ease-in;
+
+    &.selected {
+      background-color: #e8e8e8;
+    }
 
     &:first-child {
       border-top-left-radius: 6px;
@@ -41,6 +45,92 @@
       background-color: white;
       position: absolute;
       right: -2px;
+    }
+  }
+}
+
+.description {
+  font-family: var(--font-loto);
+
+  .link-docs {
+    font-weight: 200;
+    margin-top: 20px;
+    margin-left: 20px;
+    padding: 8px 10px;
+    font-size: 14px;
+    display: block;
+    max-width: fit-content;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    border-radius: 8px;
+    border: 2px solid #3498db;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #2980b9;
+    }
+
+    &:active {
+      color: #1c598a;
+    }
+  }
+
+  .paragraph {
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 300;
+  }
+
+  .prismjs {
+    font-size: 16px;
+  }
+}
+
+.test-cases {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  padding: 20px;
+  .case {
+    .case-title {
+      margin-bottom: 10px;
+      font-weight: 400;
+      font-size: 16px;
+      &::after {
+        content: ':';
+      }
+    }
+
+    .arguments {
+      width: 100%;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      background-color: #e8e8e8;
+      padding: 10px;
+      border-radius: 14px;
+      column-gap: 10px;
+
+      .arg-wrapper {
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+
+        .arg-title {
+          font-weight: 400;
+          font-size: 16px;
+        }
+
+        .arg {
+          overflow-x: auto;
+          padding: 4px;
+          font-family: var(--font-loto);
+          font-weight: 400;
+          color: black;
+          letter-spacing: 1px;
+        }
+      }
     }
   }
 }

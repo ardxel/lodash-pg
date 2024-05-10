@@ -10,6 +10,7 @@ export const selectStyles: StylesConfig = {
   }),
   option: (base, props) => ({
     ...base,
+    cursor: 'pointer',
     font: 'var(--font-lato), sans-serif',
     fontWeight: 300,
     backgroundColor: props.isSelected ? 'var(--light-gray)' : 'inherit',
@@ -32,6 +33,7 @@ export const selectStyles: StylesConfig = {
     ...baseControlStyles,
     width: 200,
     borderRadius: 10,
+    cursor: 'pointer',
     backgroundColor: 'rgba(233, 30, 99, 1)',
   }),
   menu: (baseMenuStyles) => ({

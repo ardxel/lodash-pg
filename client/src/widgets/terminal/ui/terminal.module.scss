@@ -17,6 +17,7 @@
   font-size: 20px;
   padding: 0;
   line-height: 8px;
+  margin-left: 20px;
 }
 
 .section {
@@ -24,4 +25,12 @@
   height: 100%;
   padding: 4px 0px 4px 4px;
   background-color: white;
+}
+
+.section-info {
+  border-top-left-radius: 24px;
+}
+
+.section-result {
+  border-bottom-left-radius: 24px;
 }

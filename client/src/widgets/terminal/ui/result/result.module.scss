@@ -1,0 +1,31 @@
+.terminal-tests {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  .result {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    column-gap: 10px;
+
+    .result-icon {
+      height: 100%;
+    }
+  }
+
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    font-family: var(--font-loto);
+    color: black;
+
+    .error-stack {
+      font-size: 16px;
+      color: black;
+    }
+  }
+}

@@ -1,20 +1,20 @@
 import { Allotment } from 'allotment';
 import { TerminalInfoWindow } from './info';
-import { TerminalStdoutWindow } from './stdout';
+import { TerminalResultWindow } from './result';
 
 import styles from './terminal.module.scss';
 
 export const Playground = () => {
   return (
-    <section className={styles.terminalContainer}>
+    <div className={styles.terminalContainer}>
       <Allotment vertical className={styles.terminalContainer}>
         <Allotment.Pane>
-          <TerminalStdoutWindow />
+          <TerminalResultWindow />
         </Allotment.Pane>
         <Allotment.Pane>
           <TerminalInfoWindow />
         </Allotment.Pane>
       </Allotment>
-    </section>
+    </div>
   );
 };

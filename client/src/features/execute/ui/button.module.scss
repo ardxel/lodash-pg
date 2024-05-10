@@ -1,0 +1,40 @@
+.btn {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 5px 10px 5px 10px;
+  font-weight: 300;
+  color: white;
+  background: #004dff;
+  cursor: pointer;
+  transition: background 0.1s ease-in;
+
+  &:hover {
+    background: #0038bc;
+  }
+
+  &:active {
+    background: #2668ff;
+  }
+  &:disabled {
+    cursor: default;
+    background: #0038bc;
+  }
+
+  .arrow {
+    width: 26px;
+    height: 26px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > svg {
+      fill: white;
+    }
+  }
+}

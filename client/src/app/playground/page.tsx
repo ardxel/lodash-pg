@@ -1,22 +1,23 @@
 'use client';
 
-import styles from './page.module.scss';
 import 'allotment/dist/style.css';
-import './separator-line.scss';
 import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/prism.js';
-import 'prismjs/components/prism-javascript';
+import styles from './page.module.scss';
+import './separator-line.scss';
 
-import AppEditor from '@/widgets/codeEditor';
-import Terminal from '@/widgets/terminal';
 import { Allotment } from 'allotment';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+
+const CodeEditor = dynamic(() => import('@/widgets/codeEditor'), { ssr: false });
+const Terminal = dynamic(() => import('@/widgets/terminal'), { ssr: false });
 
 export default function PlaygroundPage() {
   return (
     <main className={styles.wrapper}>
       <Allotment className={styles.inner}>
         <Allotment.Pane minSize={100}>
-          <AppEditor />
+          <CodeEditor />
         </Allotment.Pane>
         <Allotment.Pane minSize={100}>
           <Terminal />

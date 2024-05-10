@@ -9,7 +9,7 @@ import './monaco-editor-styles.css';
 const EditorLoading = () => {
   return (
     <div className={styles.editorLoading}>
-      <h1>Loading...</h1>
+      <div className="dot-loader" style={{ background: 'blue' }}></div>
     </div>
   );
 };
