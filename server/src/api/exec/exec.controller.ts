@@ -19,8 +19,6 @@ export class ExecController {
 
     @Get("entity")
     public getEntityOfLodash(@Query() dto: LodashEntityDto) {
-        const v = this.execService.getLodashEntityByName(dto.lodash_fn_name);
-        console.log(v);
-        return v;
+        return this.execService.getLodashEntityByName(dto.lodash_fn_name);
     }
 }

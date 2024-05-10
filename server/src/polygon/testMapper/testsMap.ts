@@ -156,9 +156,9 @@ _.sortBy(users, ['user', 'age']);
                         { name: "Bob", age: 30 },
                         { name: "Charlie", age: 35 },
                     ],
-                    function (o) {
+                    `function predicate(o) {
                         return o.age > 30;
-                    },
+                    }`,
                 ],
                 [{ name: "Charlie", age: 35 }],
             )
@@ -168,9 +168,9 @@ _.sortBy(users, ['user', 'age']);
                         { name: "Alice", age: 25 },
                         { name: "Bob", age: 30 },
                     ],
-                    function (o) {
+                    `function predicate(o) {
                         return o.age <= 25;
-                    },
+                    }`,
                 ],
                 [{ name: "Alice", age: 25 }],
             )

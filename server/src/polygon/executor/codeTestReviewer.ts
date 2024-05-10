@@ -1,4 +1,4 @@
-import isolatedVM from "isolated-vm";
+import * as isolatedVM from "isolated-vm";
 import * as assert from "node:assert";
 import { serializeError } from "serialize-error";
 
@@ -7,7 +7,8 @@ import { LodashFunctions } from "../types";
 import { CodeGenerator } from "./codeGenerator";
 
 export type TestingResult = {
-    testResults: (boolean | Error)[];
+    unexpectedError: boolean;
+    result: (boolean | Error)[];
 };
 
 export class CodeTestReviewer {
@@ -17,42 +18,70 @@ export class CodeTestReviewer {
     private readonly codeGenerator: CodeGenerator = new CodeGenerator();
 
     public async testCode<T extends keyof LodashFunctions>(code: string, lodashFnName: T): Promise<TestingResult> {
-        const environment = await this.compileIsolatedEnvironment(code, lodashFnName);
+        let environment;
+        let result;
+        let testLength = 3;
 
         try {
+            // it will throw an syntax error if code is not valid
+            new Function(code);
+
+            environment = await this.compileIsolatedEnvironment(code, lodashFnName);
+
             await environment.script.run(environment.context);
+
             const testFn = await environment.context.global.get(this.TEST_FN_NAME);
+            const testCases = this.testMapper.get(lodashFnName).testCases;
+            testLength = testCases.length;
+            result = testFn(testCases);
 
-            const result = testFn(this.testMapper.get(lodashFnName).testCases);
-
-            return result;
-        } catch (E) {
-            console.error(E);
-            const serializableError = serializeError(E);
             return {
-                testResults: new Array(this.testMapper.get(lodashFnName).testCases.length).fill(serializableError),
+                unexpectedError: false,
+                result,
+            };
+        } catch (E) {
+            const getSerializableError = () => serializeError(E);
+
+            if (E instanceof SyntaxError) {
+                return {
+                    unexpectedError: true,
+                    result: new Array(testLength).fill(getSerializableError()),
+                };
+            }
+            // TODO:
+            return {
+                unexpectedError: false,
+                result: [false, false, false],
             };
         } finally {
-            environment.isolate.dispose();
+            if (environment) {
+                environment.isolate.dispose();
+            }
         }
     }
 
     private async compileIsolatedEnvironment(userCode: string, lodashFnName: string) {
-        const isolate = new isolatedVM.Isolate({ memoryLimit: this.ISOLATE_MEMORY_LIMIT });
-        const context = await isolate.createContext();
+        try {
+            const isolate = new isolatedVM.Isolate({ memoryLimit: this.ISOLATE_MEMORY_LIMIT });
 
-        await context.global.set("strictEqual", assert.strictEqual);
-        await context.global.set("equal", assert.equal);
-        await context.global.set("serializeError", serializeError);
+            const context = await isolate.createContext();
 
-        const code = [userCode, this.codeGenerator.generateTestingCode(lodashFnName)].join("\n");
+            await context.global.set("serializeError", serializeError);
+            await context.global.set("strictEqual", assert.strictEqual);
+            await context.global.set("equal", assert.equal);
 
-        const script = await isolate.compileScript(code);
+            const code = [userCode, this.codeGenerator.generateTestingCode(lodashFnName)].join("\n");
 
-        return {
-            context,
-            script,
-            isolate,
-        };
+            const script = await isolate.compileScript(code);
+
+            return {
+                context,
+                script,
+                isolate,
+            };
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 }
