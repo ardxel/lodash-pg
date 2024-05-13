@@ -1,8 +1,6 @@
-import { TestMapper } from "polygon/testMapper";
+import { LodashEntityCollection } from "playground/test-entities";
 
 export class CodeGenerator {
-    private readonly testMapper = TestMapper;
-
     public generateTestingCode(lodashFnName: string): string {
         const str = `
     function test(testCases) { 
@@ -31,7 +29,7 @@ export class CodeGenerator {
     }
 
     private generateJSDOC(lodashFnName: string): string {
-        const testObj = this.testMapper.get(lodashFnName);
+        const testObj = LodashEntityCollection.get(lodashFnName);
         const args = testObj.arguments;
         const returnType = testObj.returnType;
 
@@ -47,8 +45,7 @@ export class CodeGenerator {
     }
 
     private generateDefaultFunction(lodashFnName: string) {
-        const args = this.testMapper
-            .get(lodashFnName)
+        const args = LodashEntityCollection.get(lodashFnName)
             .arguments.map((obj) => obj.name)
             .join(", ");
         const fnStr = `function ${lodashFnName}(${args}) {}`;

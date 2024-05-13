@@ -1,10 +1,9 @@
 import { IsIn, IsOptional, IsString } from "class-validator";
-import { LodashFunctions } from "polygon/types";
-import { lodashFnArray } from "./ExecuteCode.dto";
+import { LodashEntityCollection, LodashFunctions } from "playground";
 
 export class LodashEntityDto {
     @IsString()
-    @IsIn(lodashFnArray, {
+    @IsIn(LodashEntityCollection.getImplementedKeysAsArray(), {
         message: (args) => `Function ${args.value} is not in the tested list`,
     })
     @IsOptional()

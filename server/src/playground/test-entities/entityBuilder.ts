@@ -1,5 +1,4 @@
-import { LodashFunctions } from "polygon/types";
-import { LodashEntity } from "./types";
+import { LodashEntity, LodashFunctions } from "playground";
 
 type LodashFunctionsKeys = keyof LodashFunctions;
 
@@ -42,8 +41,8 @@ export class LodashTestBuilder<T extends LodashFunctionsKeys> {
         return this;
     }
 
-    public toObject(): LodashEntity {
-        if (this._testCases.length < 3) {
+    public asObject(): LodashEntity {
+        if (this._testCases.length < TESTCASES_MIN_LENGTH) {
             throw new Error(
                 `Test cases for ${this._fnName} should have at least ${TESTCASES_MIN_LENGTH} tests, but found ${this._testCases.length}`,
             );
@@ -76,24 +75,20 @@ export class LodashTestBuilder<T extends LodashFunctionsKeys> {
 }
 
 export class LodashTestManager {
-    private _testObject: Record<string, LodashTestBuilder<LodashFunctionsKeys>>;
+    private _entities: Record<string, LodashTestBuilder<LodashFunctionsKeys>> = {};
 
-    constructor() {
-        this._testObject = {};
+    public addEntity<T extends LodashFunctionsKeys>(name: LodashFunctionsKeys): LodashTestBuilder<T> {
+        this._entities[name] = new LodashTestBuilder(name);
+        return this._entities[name];
     }
 
-    public addFunc<T extends LodashFunctionsKeys>(name: LodashFunctionsKeys): LodashTestBuilder<T> {
-        this._testObject[name] = new LodashTestBuilder(name);
-        return this._testObject[name];
-    }
+    public asMap(): Record<LodashFunctionsKeys, LodashEntity> {
+        const map = {};
 
-    public getObjectAsMap(): Map<LodashFunctionsKeys, LodashEntity> {
-        const result = new Map();
-
-        for (const lodashFnName in this._testObject) {
-            result.set(lodashFnName, this._testObject[lodashFnName].toObject());
+        for (const lodashFnName in this._entities) {
+            map[lodashFnName] = this._entities[lodashFnName].asObject();
         }
 
-        return result;
+        return map as Record<LodashFunctionsKeys, LodashEntity>;
     }
 }

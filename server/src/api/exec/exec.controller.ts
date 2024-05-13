@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { TestingResult } from "polygon/executor";
+import { TestingResult } from "playground/executor";
 import { LodashEntityDto, ExecuteCodeDto } from "./dto";
 import { ExecService } from "./exec.service";
 

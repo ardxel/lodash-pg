@@ -2,8 +2,8 @@ import * as isolatedVM from "isolated-vm";
 import * as assert from "node:assert";
 import { serializeError } from "serialize-error";
 
-import { TestMapper } from "polygon/testMapper";
-import { LodashFunctions } from "../types";
+import { LodashFunctions } from "playground";
+import { LodashEntityCollection } from "playground/test-entities";
 import { CodeGenerator } from "./codeGenerator";
 
 export type TestingResult = {
@@ -14,7 +14,6 @@ export type TestingResult = {
 export class CodeTestReviewer {
     private readonly TEST_FN_NAME = "test";
     private readonly ISOLATE_MEMORY_LIMIT = 32;
-    private readonly testMapper = TestMapper;
     private readonly codeGenerator: CodeGenerator = new CodeGenerator();
 
     public async testCode<T extends keyof LodashFunctions>(code: string, lodashFnName: T): Promise<TestingResult> {
@@ -31,7 +30,7 @@ export class CodeTestReviewer {
             await environment.script.run(environment.context);
 
             const testFn = await environment.context.global.get(this.TEST_FN_NAME);
-            const testCases = this.testMapper.get(lodashFnName).testCases;
+            const testCases = LodashEntityCollection.get(lodashFnName).testCases;
             testLength = testCases.length;
             result = testFn(testCases);
 

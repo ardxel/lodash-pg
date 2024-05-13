@@ -1,13 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { CodeExecutor } from "polygon";
-import { CodeGenerator, TestingResult } from "polygon/executor";
-import { TestMapper } from "polygon/testMapper";
+import { CodeExecutor, LodashEntityCollection } from "playground";
+import { CodeGenerator, TestingResult } from "playground/executor";
 import { ExecuteCodeDto } from "./dto";
 
 @Injectable()
 export class ExecService {
-    private readonly testMapper = TestMapper;
-
     constructor(
         private readonly codeExecutor: CodeExecutor,
         private readonly codeGenerator: CodeGenerator,
@@ -18,11 +15,11 @@ export class ExecService {
     }
 
     public async getImplementedLodashMethodKeys(): Promise<string[]> {
-        return this.testMapper.asArrayImplemented();
+        return LodashEntityCollection.getImplementedKeysAsArray();
     }
 
     public async getLodashEntityByName(fnName: string) {
-        const lodashTestObject = this.testMapper.get(fnName);
+        const lodashTestObject = LodashEntityCollection.get(fnName);
 
         return {
             defaultCode: this.codeGenerator.generateDefaultCode(fnName),

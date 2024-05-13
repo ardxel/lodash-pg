@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { CodeExecutor } from "polygon";
-import { CodeGenerator } from "polygon/executor";
+import { CodeExecutor } from "playground";
+import { CodeGenerator } from "playground/executor";
 import { ExecService } from "../exec.service";
 
 describe("ExecService", () => {

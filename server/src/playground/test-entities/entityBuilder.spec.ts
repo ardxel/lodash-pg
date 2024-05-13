@@ -1,5 +1,5 @@
-import { LodashTestBuilder, LodashTestManager } from "./builder";
-import { LodashEntity } from "./types";
+import { LodashEntity } from "playground";
+import { LodashTestBuilder, LodashTestManager } from "./entityBuilder";
 
 describe("Test testMapper module", () => {
     const mockBuilderResult: LodashEntity = {
@@ -37,7 +37,7 @@ describe("Test testMapper module", () => {
             const manager = createManager();
 
             manager
-                .addFunc("join")
+                .addEntity("join")
                 .addTest([[1, 2, 3, 4, 5], ","], "1,2,3,4,5")
                 .addTest([["a", "b", "c"], ""], "abc")
                 .addTest([["foo", "bar", "baz"], " - "], "foo - bar - baz")
@@ -49,7 +49,7 @@ describe("Test testMapper module", () => {
                 .addDescription("abc")
                 .setReturnType("string");
 
-            expect(manager.getObjectAsMap().get("join")).toEqual(mockBuilderResult);
+            expect(manager.asMap()["join"]).toEqual(mockBuilderResult);
         });
     });
 
@@ -67,7 +67,7 @@ describe("Test testMapper module", () => {
                 .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
                 .addDescription("abc");
 
-            expect(builder.toObject()).toEqual(mockBuilderResult);
+            expect(builder.asObject()).toEqual(mockBuilderResult);
         });
 
         test("should throws error because builder doesnt have 3 tests", () => {
@@ -82,7 +82,7 @@ describe("Test testMapper module", () => {
                 .setReturnType("string")
                 .addDescription("abc");
 
-            expect(() => builder.toObject()).toThrow(Error);
+            expect(() => builder.asObject()).toThrow(Error);
         });
 
         test("shoud throws error because builder doesnt have arguments", () => {
@@ -96,7 +96,7 @@ describe("Test testMapper module", () => {
                 .setReturnType("string")
                 .addDescription("abc");
 
-            expect(() => builder.toObject()).toThrow(Error);
+            expect(() => builder.asObject()).toThrow(Error);
         });
 
         test("shoud throws error because builder doesnt have return type", () => {
@@ -110,7 +110,7 @@ describe("Test testMapper module", () => {
                 .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
                 .addDescription("abc");
 
-            expect(() => builder.toObject()).toThrow(Error);
+            expect(() => builder.asObject()).toThrow(Error);
         });
         test("should throws error because builder doesnt have description", () => {
             const builder = createBuilder();
@@ -124,7 +124,7 @@ describe("Test testMapper module", () => {
                 .addExample(`_.join(['a', 'b', 'c'], '~') // => 'a~b~c'`)
                 .setReturnType("string");
 
-            expect(() => builder.toObject()).toThrow(Error);
+            expect(() => builder.asObject()).toThrow(Error);
         });
         test("should throws error because builder doesnt have examples", () => {
             const builder = createBuilder();
@@ -138,7 +138,7 @@ describe("Test testMapper module", () => {
                 .setReturnType("string")
                 .addDescription("abc");
 
-            expect(() => builder.toObject()).toThrow(Error);
+            expect(() => builder.asObject()).toThrow(Error);
         });
     });
 });
